@@ -3,31 +3,41 @@ const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const sequelize = require('./config/connection');
+const routes = require('./controllers');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const path = require('path')
 
 // Initialize the Express application
 const app = express();
 const PORT = process.env.PORT || 3000;
+const hbs = exphbs.create(); 
 
 // Set up Handlebars as the template engine
-app.engine('handlebars', exphbs());
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure session middleware
 app.use(session({
-  secret: 'secret', // Secret key for signing the session ID cookie
-  resave: false, // Don't save session if unmodified
-  saveUninitialized: true // Save uninitialized session
-}));
+  secret: 'Super secret secret',
+  cookie: {
+    // Stored in milliseconds
+    maxAge: 24 * 60 * 60 * 1000, // expires after 1 day
+  },
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize,
+  })
+}))
 
 // Placeholder routes
-app.use('/auth', (req, res) => res.send('Auth route placeholder'));
-app.use('/books', (req, res) => res.send('Books route placeholder'));
-app.use('/clubs', (req, res) => res.send('Clubs route placeholder'));
-app.use('/meetings', (req, res) => res.send('Meetings route placeholder'));
+app.use(routes)
+
 
 // Sync database and start the server
 sequelize.sync({ force: false }).then(() => {

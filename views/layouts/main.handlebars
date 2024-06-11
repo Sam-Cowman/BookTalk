@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <!-- Conditionally render login or logout links -->
+        {{#if logged_in}}
+        <li><button class="no-button" id="logout-button">logout</button></li>
+        {{else}}
+        <li><a href="/login">login</a></li>
+        {{/if}}
+    </ul>
+</nav>
     {{{body}}}
+     {{#if logged_in}}
+  <script src="/js/logout.js"></script>
+  {{/if}}
 </body>
 </html>

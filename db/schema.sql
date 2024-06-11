@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS booktalk_db;
+CREATE DATABASE booktalk_db;
