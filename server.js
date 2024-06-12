@@ -1,4 +1,3 @@
-// Import required modules
 const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
@@ -7,7 +6,6 @@ const routes = require('./controllers');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const path = require('path')
 
-// Initialize the Express application
 const app = express();
 const PORT = process.env.PORT || 3000;
 const hbs = exphbs.create(); 
@@ -16,7 +14,23 @@ const hbs = exphbs.create();
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-// Middleware to parse JSON and URL-encoded data
+const sess = {
+  secret: process.env.SESSION_SECRET,
+  cookie: {},
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize
+  })
+};
+
+app.use(session(sess));
+
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(methodOverride('_method')); // Adding method-override middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));

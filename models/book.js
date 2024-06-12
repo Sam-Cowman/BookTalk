@@ -9,28 +9,39 @@ Book.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     author: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true
     },
+    clubId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'club',
+        key: 'id'
+      }
+    }
   },
   {
     sequelize,
-    timestamps: false,
-    freezeTableName: true,
-    underscored: true,
-    modelName: 'book',
+    modelName: 'book'
   }
 );
+
+Book.associate = (models) => {
+  Book.belongsTo(models.Club, {
+    foreignKey: 'clubId',
+    as: 'club'
+  });
+};
 
 module.exports = Book;
