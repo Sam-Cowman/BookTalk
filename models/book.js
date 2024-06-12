@@ -23,25 +23,11 @@ Book.init(
       type: DataTypes.STRING,
       allowNull: true
     },
-    clubId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'club',
-        key: 'id'
-      }
-    }
   },
   {
     sequelize,
     modelName: 'book'
   }
 );
-
-Book.associate = (models) => {
-  Book.belongsTo(models.Club, {
-    foreignKey: 'clubId',
-    as: 'club'
-  });
-};
 
 module.exports = Book;
