@@ -89,10 +89,15 @@ form input[type="text"], form input[type="email"], form input[type="password"], 
 
 #add-book-form {
  text-align: center;
- 
+ content: c;
 }
 
+#logout-button.no.button {
+    font-size: x-large;
+    background-color: lightpink;
+    border-radius: 4px;
 
+}
 
 form button {
     width: auto;
